@@ -18,7 +18,7 @@
 
   <div class="field">
     Author(s):
-    <div>
+    <div class="checkbox_container">
       <%= collection_check_boxes(:book, :author_ids, Author.all, :id, :name) %>
     </div>
   </div>
