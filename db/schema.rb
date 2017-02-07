@@ -10,13 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170207021211) do
+ActiveRecord::Schema.define(version: 20170207125541) do
 
   create_table "authors", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "name",       null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_authors_on_name", unique: true, using: :btree
+  end
+
+  create_table "authors_books", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "book_id",    null: false
+    t.integer  "author_id",  null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["author_id"], name: "index_authors_books_on_author_id", using: :btree
+    t.index ["book_id", "author_id"], name: "index_authors_books_on_book_id_and_author_id", unique: true, using: :btree
+    t.index ["book_id"], name: "index_authors_books_on_book_id", using: :btree
   end
 
   create_table "books", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -26,4 +36,6 @@ ActiveRecord::Schema.define(version: 20170207021211) do
     t.index ["name"], name: "index_books_on_name", unique: true, using: :btree
   end
 
+  add_foreign_key "authors_books", "authors"
+  add_foreign_key "authors_books", "books"
 end

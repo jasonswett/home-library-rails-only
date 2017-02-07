@@ -16,6 +16,13 @@
     <%= f.text_field :name %>
   </div>
 
+  <div class="field">
+    Author(s):
+    <div>
+      <%= collection_check_boxes(:book, :author_ids, Author.all, :id, :name) %>
+    </div>
+  </div>
+
   <div class="actions">
     <%= f.submit %>
   </div>
