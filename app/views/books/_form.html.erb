@@ -23,6 +23,13 @@
     </div>
   </div>
 
+  <div class="field">
+    Tags:
+    <div class="checkbox_container">
+      <%= collection_check_boxes(:book, :tag_ids, Tag.all, :id, :name) %>
+    </div>
+  </div>
+
   <div class="actions">
     <%= f.submit %>
   </div>

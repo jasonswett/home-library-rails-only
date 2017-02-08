@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170208183038) do
+ActiveRecord::Schema.define(version: 20170208190428) do
 
   create_table "authors", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "name",       null: false
@@ -34,6 +34,16 @@ ActiveRecord::Schema.define(version: 20170208183038) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_books_on_name", unique: true, using: :btree
+  end
+
+  create_table "books_tags", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "book_id",    null: false
+    t.integer  "tag_id",     null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["book_id", "tag_id"], name: "index_books_tags_on_book_id_and_tag_id", unique: true, using: :btree
+    t.index ["book_id"], name: "index_books_tags_on_book_id", using: :btree
+    t.index ["tag_id"], name: "index_books_tags_on_tag_id", using: :btree
   end
 
   create_table "tags", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -62,4 +72,6 @@ ActiveRecord::Schema.define(version: 20170208183038) do
 
   add_foreign_key "authors_books", "authors"
   add_foreign_key "authors_books", "books"
+  add_foreign_key "books_tags", "books"
+  add_foreign_key "books_tags", "tags"
 end
