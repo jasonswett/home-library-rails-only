@@ -13,6 +13,8 @@ class NewBookPage
     find('label', text: name).click
   end
 
+  alias_method :select_tag, :select_author
+
   def submit
     click_button "Create Book"
   end

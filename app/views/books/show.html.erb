@@ -10,5 +10,10 @@
   <%= @book.author_names %>
 </p>
 
+<p>
+  <strong>Tag(s):</strong>
+  <%= @book.tag_names %>
+</p>
+
 <%= link_to 'Edit', edit_book_path(@book) %> |
 <%= link_to 'Back', books_path %>

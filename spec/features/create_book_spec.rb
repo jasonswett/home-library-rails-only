@@ -26,4 +26,15 @@ RSpec.feature "Creating a book", type: :feature do
 
     expect(page).to have_text("Author(s): Carl Sagan")
   end
+
+  scenario "User creates a new book with a tag" do
+    create(:tag, name: "Science")
+
+    @new_book_page.visit
+    @new_book_page.fill_in(name: "Cosmos")
+    @new_book_page.select_tag("Science")
+    @new_book_page.submit
+
+    expect(page).to have_text("Tag(s): Science")
+  end
 end

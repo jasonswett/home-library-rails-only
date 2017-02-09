@@ -29,4 +29,14 @@ RSpec.describe Book, type: :model do
       expect(@book.author_names).to eq("Carl Sagan, Ann Druyan")
     end
   end
+
+  describe "#tag_names" do
+    it "returns a comma-separated list" do
+      @book.save!
+      @book.tags << create(:tag, name: "Science")
+      @book.tags << create(:tag, name: "Biology")
+
+      expect(@book.tag_names).to eq("Science, Biology")
+    end
+  end
 end

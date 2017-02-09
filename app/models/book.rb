@@ -6,4 +6,8 @@ class Book < ApplicationRecord
   def author_names
     authors.map(&:name).join(', ')
   end
+
+  def tag_names
+    tags.map(&:name).join(', ')
+  end
 end
