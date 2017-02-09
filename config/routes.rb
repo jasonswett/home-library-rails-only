@@ -1,11 +1,11 @@
 Rails.application.routes.draw do
   namespace :admin do
     resources :users
-resources :authors
-resources :authors_books
-resources :books
-resources :books_tags
-resources :tags
+    resources :authors
+    resources :authors_books
+    resources :books
+    resources :books_tags
+    resources :tags
 
     root to: "users#index"
   end
@@ -15,4 +15,10 @@ resources :tags
   resources :authors
   resources :books
   root "books#index"
+
+  namespace :api do
+    namespace :v1 do
+      resources :books
+    end
+  end
 end
