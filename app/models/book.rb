@@ -4,10 +4,14 @@ class Book < ApplicationRecord
   has_and_belongs_to_many :tags
 
   def author_names
-    authors.map(&:name).join(', ')
+    comma_separated_list(:authors)
   end
 
   def tag_names
-    tags.map(&:name).join(', ')
+    comma_separated_list(:tags)
+  end
+
+  def comma_separated_list(association_name)
+    send(association_name).map(&:name).join(', ')
   end
 end
