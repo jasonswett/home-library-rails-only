@@ -17,10 +17,13 @@
   </div>
 
   <div class="field">
-    Author(s):
-    <div class="checkbox_container">
-      <%= collection_check_boxes(:book, :author_ids, Author.all, :id, :name) %>
-    </div>
+    <label>Multiple selection
+      <select multiple name="books[author_ids]">
+        <% Author.all.each do |author| %>
+          <option value="<%= author.id %>"><%= author.name %></option>
+        <% end %>
+      </select>
+    </label>
   </div>
 
   <div class="field">

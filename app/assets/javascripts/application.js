@@ -13,4 +13,7 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
+//= require sifter
+//= require microplugin
+//= require selectize
 //= require_tree .
