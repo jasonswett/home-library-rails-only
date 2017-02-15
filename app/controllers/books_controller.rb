@@ -25,7 +25,7 @@ class BooksController < ApplicationController
   # POST /books.json
   def create
     Book.transaction do
-      @book = Book.new(filter_params(book_params))
+      @book = Book.new(create_authors_from_params(book_params))
       raise ActiveRecord::Rollback unless @book.valid?
     end
 
@@ -45,7 +45,7 @@ class BooksController < ApplicationController
   def update
     Book.transaction do
       @book = Book.find(params[:id])
-      @book.update_attributes(filter_params(book_params))
+      @book.update_attributes(create_authors_from_params(book_params))
       raise ActiveRecord::Rollback unless @book.valid?
     end
 
@@ -76,7 +76,7 @@ class BooksController < ApplicationController
       @book = Book.find(params[:id])
     end
 
-    def filter_params(original_params)
+    def create_authors_from_params(original_params)
       BookParamsWithAuthorStrings.new(original_params).process
     end
 
