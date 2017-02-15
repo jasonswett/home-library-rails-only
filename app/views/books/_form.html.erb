@@ -17,14 +17,13 @@
   </div>
 
   <div class="field">
-    <%= f.select(:author_ids, Author.all.collect { |a| [a.name, a.id]}, {}, { multiple: true }) %>
+    <%= f.label :author_ids, 'Authors' %>
+    <%= f.select(:author_ids, @author_options, {}, { multiple: true }) %>
   </div>
 
   <div class="field">
-    Tags:
-    <div class="checkbox_container">
-      <%= collection_check_boxes(:book, :tag_ids, Tag.all, :id, :name) %>
-    </div>
+    <%= f.label :tag_ids, 'Tags' %>
+    <%= f.select(:tag_ids, @tag_options, {}, { multiple: true }) %>
   </div>
 
   <div class="actions">

@@ -15,7 +15,8 @@ class NewBookPage
   end
 
   def select_tag(name)
-    find('label', text: name).click
+    Capybara::fill_in "book_tag_ids-selectized", with: name
+    find('#book_tag_ids-selectized').native.send_keys(:return)
   end
 
   def submit

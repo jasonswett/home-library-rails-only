@@ -1,5 +1,6 @@
 class BooksController < ApplicationController
   before_action :set_book, only: [:show, :edit, :update, :destroy]
+  before_action :set_options, only: [:new, :edit, :update, :create]
 
   # GET /books
   # GET /books.json
@@ -71,6 +72,11 @@ class BooksController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_book
       @book = Book.find(params[:id])
+    end
+
+    def set_options
+      @author_options = Author.all.collect { |a| [a.name, a.id] }
+      @tag_options = Tag.all.collect { |a| [a.name, a.id] }
     end
 
     def create_authors_from_params(original_params)
