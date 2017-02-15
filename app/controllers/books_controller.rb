@@ -67,10 +67,12 @@ class BooksController < ApplicationController
       @book = Book.find(params[:id])
     end
 
+    def filter_params(original_params)
+      BookParamsWithAuthorStrings.new(original_params).process
+    end
+
     # Never trust parameters from the scary internet, only allow the white list through.
     def book_params
-      processed_book_params = params.require(:book).permit(:name, author_ids: [], tag_ids: [])
-      processed_book_params[:author_ids] = BookParamsWithAuthorStrings.new(processed_book_params[:author_ids]).process
-      processed_book_params
+      filter_params(params.require(:book).permit(:name, author_ids: [], tag_ids: []))
     end
 end
