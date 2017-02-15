@@ -85,6 +85,7 @@ RSpec.describe BooksController, type: :controller do
         }
 
         post :create, params: valid_attributes_with_author_name, session: valid_session
+        expect(Author.where(name: 'Jane Austen')).to exist
       end
 
       it "assigns a newly created book as @book" do
@@ -123,6 +124,20 @@ RSpec.describe BooksController, type: :controller do
         put :update, params: {id: book.to_param, book: new_attributes}, session: valid_session
         book.reload
         expect(assigns(:book).name).to eq("My Cool Book")
+      end
+
+      it "adds an author" do
+        book = Book.create! valid_attributes
+
+        valid_attributes_with_author_name = {
+          id: book.to_param,
+          book: {
+            author_ids: ['Jane Austen']
+          }
+        }
+
+        post :update, params: valid_attributes_with_author_name, session: valid_session
+        expect(Author.where(name: 'Jane Austen')).to exist
       end
 
       it "assigns the requested book as @book" do
