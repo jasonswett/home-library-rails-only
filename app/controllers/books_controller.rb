@@ -24,7 +24,10 @@ class BooksController < ApplicationController
   # POST /books
   # POST /books.json
   def create
-    @book = Book.new(book_params)
+    Book.transaction do
+      @book = Book.new(filter_params(book_params))
+      raise ActiveRecord::Rollback unless @book.valid?
+    end
 
     respond_to do |format|
       if @book.save
@@ -41,7 +44,7 @@ class BooksController < ApplicationController
   # PATCH/PUT /books/1.json
   def update
     respond_to do |format|
-      if @book.update(book_params)
+      if @book.update(filter_params(book_params))
         format.html { redirect_to @book, notice: 'Book was successfully updated.' }
         format.json { render :show, status: :ok, location: @book }
       else
@@ -73,6 +76,6 @@ class BooksController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def book_params
-      filter_params(params.require(:book).permit(:name, author_ids: [], tag_ids: []))
+      params.require(:book).permit(:name, author_ids: [], tag_ids: [])
     end
 end
