@@ -1,5 +1,6 @@
 class BooksController < ApplicationController
   before_action :set_book, only: [:show, :edit, :update, :destroy]
+  before_action :set_options, only: [:new, :edit, :update, :create]
 
   # GET /books
   # GET /books.json
@@ -24,15 +25,18 @@ class BooksController < ApplicationController
   # POST /books
   # POST /books.json
   def create
-    @book = Book.new(book_params)
-
     respond_to do |format|
-      if @book.save
-        format.html { redirect_to @book, notice: 'Book was successfully created.' }
-        format.json { render :show, status: :created, location: @book }
-      else
-        format.html { render :new }
-        format.json { render json: @book.errors, status: :unprocessable_entity }
+      Book.transaction do
+        @book = Book.new(book_params)
+
+        if @book.save
+          format.html { redirect_to @book, notice: 'Book was successfully created.' }
+          format.json { render :show, status: :created, location: @book }
+        else
+          format.html { render :new }
+          format.json { render json: @book.errors, status: :unprocessable_entity }
+          raise ActiveRecord::Rollback unless @book.valid?
+        end
       end
     end
   end
@@ -41,12 +45,15 @@ class BooksController < ApplicationController
   # PATCH/PUT /books/1.json
   def update
     respond_to do |format|
-      if @book.update(book_params)
-        format.html { redirect_to @book, notice: 'Book was successfully updated.' }
-        format.json { render :show, status: :ok, location: @book }
-      else
-        format.html { render :edit }
-        format.json { render json: @book.errors, status: :unprocessable_entity }
+      Book.transaction do
+        if @book.update(book_params)
+          format.html { redirect_to @book, notice: 'Book was successfully updated.' }
+          format.json { render :show, status: :ok, location: @book }
+        else
+          format.html { render :edit }
+          format.json { render json: @book.errors, status: :unprocessable_entity }
+          raise ActiveRecord::Rollback unless @book.valid?
+        end
       end
     end
   end
@@ -67,8 +74,17 @@ class BooksController < ApplicationController
       @book = Book.find(params[:id])
     end
 
+    def set_options
+      @author_options = Author.all.collect { |a| [a.name, a.id] }
+      @tag_options = Tag.all.collect { |a| [a.name, a.id] }
+    end
+
+    def create_authors_from_params(original_params)
+      BookParamsWithAuthorStrings.new(original_params).process
+    end
+
     # Never trust parameters from the scary internet, only allow the white list through.
     def book_params
-      params.require(:book).permit(:name, author_ids: [], tag_ids: [])
+      create_authors_from_params(params.require(:book).permit(:name, author_ids: [], tag_ids: []))
     end
 end
