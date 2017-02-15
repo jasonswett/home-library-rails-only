@@ -10,10 +10,13 @@ class NewBookPage
   end
 
   def select_author(name)
-    find('label', text: name).click
+    Capybara::fill_in "book_author_ids-selectized", with: name
+    find('#book_author_ids-selectized').native.send_keys(:return)
   end
 
-  alias_method :select_tag, :select_author
+  def select_tag(name)
+    find('label', text: name).click
+  end
 
   def submit
     click_button "Create Book"

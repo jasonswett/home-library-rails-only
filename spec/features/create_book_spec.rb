@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Creating a book", type: :feature do
+RSpec.feature "Creating a book", type: :feature, js: true do
   before do
     user = create(:user)
     login_as(user)
