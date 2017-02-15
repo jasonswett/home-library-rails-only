@@ -76,6 +76,17 @@ RSpec.describe BooksController, type: :controller do
         }.to change(Book, :count).by(1)
       end
 
+      it "adds an author" do
+        valid_attributes_with_author_name = {
+          book: {
+            name: 'foo',
+            author_ids: ['Jane Austen']
+          }
+        }
+
+        post :create, params: valid_attributes_with_author_name, session: valid_session
+      end
+
       it "assigns a newly created book as @book" do
         post :create, params: {book: valid_attributes}, session: valid_session
         expect(assigns(:book)).to be_a(Book)

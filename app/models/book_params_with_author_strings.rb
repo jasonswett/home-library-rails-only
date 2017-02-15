@@ -24,6 +24,8 @@ class BookParamsWithAuthorStrings
   end
 
   def process
+    return @values if @values.blank?
+
     values_with_huge_numbers_stripped_out = handle_huge_numbers
 
     values_with_huge_numbers_stripped_out.collect do |value|

@@ -24,7 +24,9 @@ class BooksController < ApplicationController
   # POST /books
   # POST /books.json
   def create
-    @book = Book.new(book_params)
+    processed_book_params = book_params
+    processed_book_params[:author_ids] = BookParamsWithAuthorStrings.new(processed_book_params[:author_ids]).process
+    @book = Book.new(processed_book_params)
 
     respond_to do |format|
       if @book.save
