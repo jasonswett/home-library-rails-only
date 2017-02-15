@@ -139,18 +139,34 @@ RSpec.describe BooksController, type: :controller do
         expect(assigns(:book).name).to eq("My Cool Book")
       end
 
+      it "only saves a new author if the book is valid" do
+        book = Book.create! valid_attributes
+
+        invalid_attributes_with_author_name = {
+          id: book.to_param,
+          book: {
+            name: "",
+            author_ids: ["Jane Austen"]
+          }
+        }
+
+        expect {
+          post :update, params: invalid_attributes_with_author_name, session: valid_session
+        }.not_to change(Author, :count)
+      end
+
       it "adds an author" do
         book = Book.create! valid_attributes
 
         valid_attributes_with_author_name = {
           id: book.to_param,
           book: {
-            author_ids: ['Jane Austen']
+            author_ids: ["Jane Austen"]
           }
         }
 
         post :update, params: valid_attributes_with_author_name, session: valid_session
-        expect(Author.where(name: 'Jane Austen')).to exist
+        expect(Author.where(name: "Jane Austen")).to exist
       end
 
       it "assigns the requested book as @book" do

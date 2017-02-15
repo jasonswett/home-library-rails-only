@@ -43,8 +43,14 @@ class BooksController < ApplicationController
   # PATCH/PUT /books/1
   # PATCH/PUT /books/1.json
   def update
+    Book.transaction do
+      @book = Book.find(params[:id])
+      @book.update_attributes(filter_params(book_params))
+      raise ActiveRecord::Rollback unless @book.valid?
+    end
+
     respond_to do |format|
-      if @book.update(filter_params(book_params))
+      if @book.save
         format.html { redirect_to @book, notice: 'Book was successfully updated.' }
         format.json { render :show, status: :ok, location: @book }
       else
